@@ -6,7 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/자바json/json-simple-1.1.1 (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json-simple-1.1.1 (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json-simple-1.1.jar"/>
