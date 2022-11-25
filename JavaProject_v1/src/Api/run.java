@@ -77,7 +77,7 @@ public class run {
    		 
     		for(int j = 1;j<4;j++) {
    	    		for(int i = 0;i<size;i++) {
-   	    			text = " "+Value[j][i] + "\n";
+   	    			text = Value[j][i] + "\n";
    	                writer.write(text);
    	            }
    	    		writer.write("\n");
@@ -89,6 +89,7 @@ public class run {
     	catch(Exception e) {
     		e.printStackTrace(); 	//오류 발생 시 오류사항을 콘솔창에 표시
     	}
+    	
 	}
 
 }
