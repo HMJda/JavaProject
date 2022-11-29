@@ -1,13 +1,50 @@
 package Api;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+
+
+import java.sql.Connection;//SQL 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import Api.translateXY.*;
 import Api.gpsApi.*;
 
 public class run {
 	public static void main(String[] args) throws IOException{
+		 Connection connect = null;
+	        try {
+	        	Class.forName("oracle.jdbc.driver.OracleDriver");
+	            String user = "system"; 
+	            String pw = "1";
+	            String DBURL = "jdbc:oracle:thin:@localhost:1521:xe";
+	            
+	            Class.forName("oracle.jdbc.driver.OracleDriver");        
+	            connect = DriverManager.getConnection(DBURL, user, pw);
+	        } catch (ClassNotFoundException cnfe) {
+	            System.out.println("DB 드라이버 로딩 실패 :"+cnfe.toString());
+	        } catch (SQLException sqle) {
+	            System.out.println("DB 접속실패 : "+sqle.toString());
+	        } catch (Exception e) {
+	            System.out.println("Unkonwn error");
+	            e.printStackTrace();
+	        }
+	        try {
+			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨");
+			reset.executeUpdate();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		translateXY XY = new translateXY(); //translateXY 객체 생성
 		weatherApi wapi = new weatherApi();//weatherApi 객체 생성
 		gpsApi gapi = new gpsApi(); //gpsApi 객체 생성
@@ -40,10 +77,7 @@ public class run {
 		}
 		
     	System.out.println("현재시각"+base_date+wapi.localTime());
-    	int size = 26;
-    	if(base_time == "0500"&& base_time == "1400"&& base_time == "2000") {
-    		size = 27;
-    	}
+    	
     	String nx = "98"; //임시 데이터 값 부산
     	String ny = "76";//임시 데이터 값  
     	
@@ -52,43 +86,13 @@ public class run {
     	
     	//System.out.println(nx+ny);//x,y 좌표 테스트
     	
-    	String[][] Value = new String[4][size];
     	for(int i = 1;i<4;i++) {
-    		Value[i]=wapi.bringWeaterFromApi(Integer.toString(i),base_date,base_time,nx,ny);   		
+    		wapi.bringWeaterFromApi(Integer.toString(i),base_date,base_time,nx,ny);   		
     	}
         System.out.println(gpsxy.adress); //adress 출력 
         //System.out.println(gpsxy.jibunAddress); //jibunAddress 출력
         
-    	for(int j = 1;j<4;j++) {
-    		for(int i = 0;i<size;i++) {
-                System.out.println(" "+Value[j][i]);
-            }
-    		System.out.println();
-    	}		
-    	
-    	//메모장에 저장
-    	String text = "";	//저장할 텍스트
-    	String fileName = "infomation.txt";	//저장 경로와 메모장 이름
-    	try {
-    		File file = new File(fileName);
-    		FileWriter writer = new FileWriter(file, false);	//true: 파일이 이미 있을 경우 text 이어서 작성
-   		 
-    		writer.write(gpsxy.adress + "\n");	//주소 저장
-   		 
-    		for(int j = 1;j<4;j++) {
-   	    		for(int i = 0;i<size;i++) {
-   	    			text = Value[j][i] + "\n";
-   	                writer.write(text);
-   	            }
-   	    		writer.write("\n");
-   	    	}
-   		 
-    		writer.flush();	//FileWriter 내부 버퍼의 내용을 파일에 writer. flush() 호출 안 하면 내용이 버퍼에만 남고 파일에는 쓰이지 않는 상황 발생할 수 있음
-    		writer.close();	//파일 닫기
-    	} 
-    	catch(Exception e) {
-    		e.printStackTrace(); 	//오류 발생 시 오류사항을 콘솔창에 표시
-    	}
+    
     	
 	}
 
