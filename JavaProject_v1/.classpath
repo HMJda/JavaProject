@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json-simple-1.1.1 (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/dore4/git/JavaProject/JavaProject_v1/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="ojdbc8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
