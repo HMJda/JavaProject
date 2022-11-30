@@ -35,15 +35,7 @@ public class run {
 			reset.executeUpdate();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		}
-		
-		
-		
-		
-		
-		
-		
-		
+		}	
 		
 		translateXY XY = new translateXY(); //translateXY 객체 생성
 		weatherApi wapi = new weatherApi();//weatherApi 객체 생성
