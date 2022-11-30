@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import java.sql.*; // SQL 
+import Api.weatherDBconn;
 
 public class weatherApi{
 	/** 현재 날짜 가져오기*/ //https://hianna.tistory.com/607 참고함
@@ -100,6 +101,7 @@ public class weatherApi{
 	 * base_date와 base_time은 기상청예보가 나왔을떄 받는 기준 시간 내일 시간을 입력하면 안됨 기상청에서 정보가 안나왔기떄문 1~3일뒤의 정보를 알려면 pageNo 이용
 	 * nx와 ny는 경도 위도 값*/
 	public void bringWeaterFromApi(String pageNo,String base_date, String base_time, String nx,String ny)throws IOException {
+		Api.weatherDBconn dbConn = new Api.weatherDBconn();
     	//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst 단기 예보 
 		//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst 초단기 예보
     	String URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
@@ -139,24 +141,7 @@ public class weatherApi{
        
         
         /** db 연결 부분 */
-        Connection connect = null;
-        try {
-        	Class.forName("oracle.jdbc.driver.OracleDriver");
-            String user = "system"; 
-            String pw = "1";
-            String DBURL = "jdbc:oracle:thin:@localhost:1521:xe";
-            
-            Class.forName("oracle.jdbc.driver.OracleDriver");        
-            connect = DriverManager.getConnection(DBURL, user, pw);          
-        } catch (ClassNotFoundException cnfe) {
-            System.out.println("DB 드라이버 로딩 실패 :"+cnfe.toString());
-        } catch (SQLException sqle) {
-            System.out.println("DB 접속실패 : "+sqle.toString());
-        } catch (Exception e) {
-            System.out.println("Unkonwn error");
-            e.printStackTrace();
-        }
-        
+        Connection connect = dbConn.dbConn();
         /* CREATE TABLE  날씨(
     		날짜 CHAR(20) NOT NULL,
     		시간 CHAR(20) NOT NULL,
