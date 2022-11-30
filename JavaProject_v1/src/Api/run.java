@@ -31,7 +31,7 @@ public class run {
 	            e.printStackTrace();
 	        }
 	        try {
-			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨");
+			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨"); // db 초기화 부분
 			reset.executeUpdate();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
