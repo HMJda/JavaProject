@@ -17,6 +17,8 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import java.sql.*; // SQL 
+
 public class weatherApi{
 	/** 현재 날짜 가져오기*/ //https://hianna.tistory.com/607 참고함
 	public String localDate() 
@@ -97,11 +99,11 @@ public class weatherApi{
 	 * pageNO는 base time 23시간 기준 1일이면 내일 2면 2일뒤 3이면 3일뒤이나 한계값은 3 
 	 * base_date와 base_time은 기상청예보가 나왔을떄 받는 기준 시간 내일 시간을 입력하면 안됨 기상청에서 정보가 안나왔기떄문 1~3일뒤의 정보를 알려면 pageNo 이용
 	 * nx와 ny는 경도 위도 값*/
-	public String[] bringWeaterFromApi(String pageNo,String base_date, String base_time, String nx,String ny)throws IOException {
+	public void bringWeaterFromApi(String pageNo,String base_date, String base_time, String nx,String ny)throws IOException {
     	//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst 단기 예보 
 		//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst 초단기 예보
     	String URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
-    	String serviceKey = "서비스키";
+    	String serviceKey = "Pgi1iRwF2BddrARqlNbIA27xW19ct1RXz9ZPDZSRqEMP2WjQC93JFHc1rOw1cNCqWMDRonq9F8rDCR7hA5SQcw%3D%3D";
     	// pageNo 아마 보여줄 1이면 ex1015 기준 1이면 16일 2이면 17일 ....
     	String numOfRows = "290";//290이 00~23시까지 출력 2+ 12 * 시간
     	String dataType = "JSON";                     
@@ -134,17 +136,66 @@ public class weatherApi{
         conn.disconnect();        //api 호출 끝
         
         //System.out.println(sb.toString()); //혹시모를 api 출력문 println
+       
+        
+        /** db 연결 부분 */
+        Connection connect = null;
+        try {
+        	Class.forName("oracle.jdbc.driver.OracleDriver");
+            String user = "system"; 
+            String pw = "1";
+            String DBURL = "jdbc:oracle:thin:@localhost:1521:xe";
+            
+            Class.forName("oracle.jdbc.driver.OracleDriver");        
+            connect = DriverManager.getConnection(DBURL, user, pw);          
+        } catch (ClassNotFoundException cnfe) {
+            System.out.println("DB 드라이버 로딩 실패 :"+cnfe.toString());
+        } catch (SQLException sqle) {
+            System.out.println("DB 접속실패 : "+sqle.toString());
+        } catch (Exception e) {
+            System.out.println("Unkonwn error");
+            e.printStackTrace();
+        }
+        
+        /* CREATE TABLE  날씨(
+    		날짜 CHAR(20) NOT NULL,
+    		시간 CHAR(20) NOT NULL,
+    		기온 CHAR(20),
+    		풍속 CHAR(20),
+    		하늘상태 CHAR(20),
+    		강수형태 CHAR(20),
+    		강수확률 CHAR(20),
+    		최고기온 CHAR(20),
+    		최저기온 CHAR(20)
+			);
+         */	  
+        /** db 연결 부분 */   
+        
         
         String result = sb.toString();
         //값을 스트링배열에 저장 하는 부분
         JSONObject WeatherData;
-        String[] VALUE = new String[27];
         String date = "";
         String time = "";
         String DataValue = "";
         String info = "";
-        int index = 0;
+
+        /**저장용 문자열*/
+        String temp = null;//기온
+        String wind = null;//풍속
+        String sky= null; //하늘상태
+        String pp = null; //강수형태
+        String POP = null; //강수확률
+        String TMX = null; //최고기온
+        String TMN = null; //최저기온
+
         String checkTime = ""; //현재 시간 확인
+        /*try {
+			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨");
+			reset.executeUpdate();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}*/
         try {
         	JSONParser parsar = new JSONParser();
         	JSONObject obj = (JSONObject) parsar.parse(result);
@@ -160,103 +211,81 @@ public class weatherApi{
                 time = WeatherData.get("fcstTime").toString();
                 DataValue = WeatherData.get("fcstValue").toString();
                 info = WeatherData.get("category").toString();
-                if(!time.equals(checkTime)&&!checkTime.equals("")) { //fcstTime이 CheckTime과 다르면 작동 왜만들었늕디 까먹음
-                	VALUE[index] = date +","+checkTime+"," + VALUE[index];
-                	index++;
-                }
                 checkTime = time; //fcstTime 넘겨줌
                 
-            
                 if(info.equals("POP")) { //강수확률               
                 	info = "강수확률";
-                	DataValue  = DataValue+" %";
-                }
-                if(info.equals("PCP")) { //강수량
-                	info = "1시간강수량";
-                	if(DataValue.equals("강수없음")||DataValue.equals("1.0mm미만")||DataValue.equals("50.0mm이상"));
-                	else DataValue = DataValue + " mm";               
+                	POP  = DataValue+" %";
                 }
                 if(info.equals("PTY")){ //강수
                 	info = "강수형태"; 
                 	if(DataValue.equals("0")) {
-                		DataValue = "없음";
+                		pp = "없음";
                 	}else if(DataValue.equals("1")) {
-                		DataValue = "비";
+                		pp = "비";
                 	}else if(DataValue.equals("2")) {
-                		DataValue = "눈/비";
+                		pp = "눈/비";
                 	}else if(DataValue.equals("3")) {
-                		DataValue = "눈";
+                		pp = "눈";
                 	}else if(DataValue.equals("4")) {
-                		DataValue = "소나기";
+                		pp = "소나기";
                 	}
-                }
-                if(info.equals("REH")) { //습도            
-                	info = "습도";
-                	DataValue = DataValue+" %";
                 }
                 if(info.equals("SKY")) { //하늘상태
                 	info = "하늘상태";
                 	if(DataValue.equals("1")) {
-                		DataValue = "맑음";
+                		sky = "맑음";
                 	}else if(DataValue.equals("2")) {
-                		DataValue = "비";
+                		sky = "비";
                 	}else if(DataValue.equals("3")) {
-                		DataValue = "구름많음";
+                		sky = "구름많음";
                 	}else if(DataValue.equals("4")) {
-                		DataValue = "흐림";
+                		sky = "흐림";
                 	}
-                }
-                if(info.equals("UUU")) { //동서바람풍속
-                	info = "동서바람풍속";
-                	DataValue = DataValue+" m/s";
-                }
-                if(info.equals("VVV")) { //남북바람풍속
-                	info = "남북바람풍속";
-                	DataValue = DataValue+" m/s";
                 }
                 if(info.equals("TMP")) { //기온
                 	info = "기온";
-                	DataValue = DataValue+" ℃";
-                }
-                if(info.equals("SNO")) { //적설량
-                	info = "1시간적설량";
-                	if(DataValue.equals("적설없음")||DataValue.equals("1.0cm미만")||DataValue.equals("5.0cm이상"));
-                	else DataValue = DataValue + " cm";
-                }
-                if(info.equals("VEC")) { //풍향
-                	info = "풍향";
-                	DataValue = DataValue + " °";
+                	temp = DataValue+" ℃";
                 }
                 if(info.equals("WSD")) { //풍속 
                 	info = "풍속";
-                	DataValue = DataValue + " m/s";
+                	wind = DataValue + " m/s";
                 }
-                if(info.equals("TMX")) { //최고기온
-                	info = "최고기온";
-                	DataValue = DataValue + " ℃";
+                if(info.equals("TMX")) { //최고 기온
+                	info = "기온";
+                	TMX = DataValue + " ℃";
                 }
-                if(info.equals("TMN")) { //최저기온
-                	info = "최저기온";
-                	DataValue = DataValue + " ℃";
+                if(info.equals("TMN")) { //최저 기온
+                	info = "기온";
+                	TMN = DataValue + " ℃";
                 }
-                if(info.equals("WAV")) { //파도의 높이
-                	info = "파고"; 
-                	DataValue = DataValue + " M";
+                /** db 저장 부분 */  
+                String insertQuery = 
+    	    			"insert into 날씨 (날짜,시간,기온,풍속,하늘상태,강수형태,강수확률,최고기온,최저기온) values (?, ?,?,?,?,?,?,?,?)";
+                if(info.equals("SNO")||info.equals("TMX")||info.equals("TMN")) {
+                	try {
+                    	PreparedStatement preState = connect.prepareStatement(insertQuery); // db에 정보 입력 부분
+                    	preState.setString(1,date );
+                    	preState.setString(2, checkTime);
+                    	preState.setString(3, temp);
+                    	preState.setString(4, wind);
+                    	preState.setString(5, sky);
+                    	preState.setString(6, pp);
+                    	preState.setString(7, POP);
+                    	preState.setString(8, TMX);
+                    	preState.setString(9, TMN);
+                    	preState.executeUpdate();
+                    } catch (SQLException e1) {
+                    	e1.printStackTrace();
+                    }
                 }
-            
-                if(VALUE[index]==null) {
-                	VALUE[index] = info + "," +  DataValue + ","; 
-                }else {
-                	VALUE[index] += info + "," +  DataValue + ",";  
-                }
+                /** db 저장 부분 */  
             } 
-            VALUE[index] = date +","+checkTime+"," + VALUE[index];
-            return VALUE; 
+
         }
         catch(Exception e) 
         {
         	System.out.println(e);
-        	return null;
         }             
     }
 }
