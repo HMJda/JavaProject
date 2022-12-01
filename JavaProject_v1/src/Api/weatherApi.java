@@ -18,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import java.sql.*; // SQL 
-import Api.weatherDBconn;
 
 public class weatherApi{
 	/** 현재 날짜 가져오기*/ //https://hianna.tistory.com/607 참고함
