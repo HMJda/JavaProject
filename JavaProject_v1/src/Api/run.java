@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 import Api.translateXY.*;
 import Api.gpsApi.*;
-import Api.weatherDBconn;
 
 public class run {
 	public static void main(String[] args) throws IOException, SQLException{
@@ -71,11 +70,12 @@ public class run {
         System.out.println(gpsxy.adress); //adress 출력 
         //System.out.println(gpsxy.jibunAddress); //jibunAddress 출력
         
-    
+        /*//최저 최고 기온 테스트
     	double TMX = dbConn.BringTMX();   	
     	double TMN = dbConn.BringTMN();
     	System.out.println("최고 기온 " +TMX);
     	System.out.println("최저 기온 " +TMN);
+    	*/
 	}
 
 }
