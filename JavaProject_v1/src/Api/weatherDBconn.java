@@ -13,8 +13,8 @@ public class weatherDBconn {
 		Connection connect = null;
         try {
         	Class.forName("oracle.jdbc.driver.OracleDriver");
-            String user = "system"; 
-            String pw = "1";
+            String user = "system";  //오라클 db 유저
+            String pw = "1"; //오라클 db 비밀번호 
             String DBURL = "jdbc:oracle:thin:@localhost:1521:xe";
             
             Class.forName("oracle.jdbc.driver.OracleDriver");        
