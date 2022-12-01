@@ -10,27 +10,14 @@ import java.sql.SQLException;
 
 import Api.translateXY.*;
 import Api.gpsApi.*;
+import Api.weatherDBconn;
 
 public class run {
-	public static void main(String[] args) throws IOException{
-		 Connection connect = null;
-	        try {
-	        	Class.forName("oracle.jdbc.driver.OracleDriver");
-	            String user = "system"; 
-	            String pw = "1";
-	            String DBURL = "jdbc:oracle:thin:@localhost:1521:xe";
-	            
-	            Class.forName("oracle.jdbc.driver.OracleDriver");        
-	            connect = DriverManager.getConnection(DBURL, user, pw);
-	        } catch (ClassNotFoundException cnfe) {
-	            System.out.println("DB 드라이버 로딩 실패 :"+cnfe.toString());
-	        } catch (SQLException sqle) {
-	            System.out.println("DB 접속실패 : "+sqle.toString());
-	        } catch (Exception e) {
-	            System.out.println("Unkonwn error");
-	            e.printStackTrace();
-	        }
-	        try {
+	public static void main(String[] args) throws IOException, SQLException{
+		/** db 연결 부분 */
+        weatherDBconn dbConn = new weatherDBconn();
+        Connection connect = dbConn.dbConn();
+	    try {
 			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨"); // db 초기화 부분
 			reset.executeUpdate();
 		} catch (SQLException e2) {
@@ -85,7 +72,10 @@ public class run {
         //System.out.println(gpsxy.jibunAddress); //jibunAddress 출력
         
     
-    	
+    	double TMX = dbConn.BringTMX();   	
+    	double TMN = dbConn.BringTMN();
+    	System.out.println("최고 기온 " +TMX);
+    	System.out.println("최저 기온 " +TMN);
 	}
 
 }
