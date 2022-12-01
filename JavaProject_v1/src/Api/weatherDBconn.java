@@ -7,12 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.time.LocalDate; //날짜
-import java.time.format.DateTimeFormatter; //시간 포맷
-import java.time.LocalTime; //시간
-
-import Api.weatherApi;
-
 public class weatherDBconn {
 	/** db 연결 */
 	public Connection dbConn() {
@@ -54,6 +48,7 @@ public class weatherDBconn {
 			return null;
 		 }
 	 }
+	 /** 오늘 최고 기온을 가져옴*/
 	 public double BringTMX() throws SQLException {
 		 Api.weatherApi w = new Api.weatherApi();
 		 double TMX = 0.0;		 
@@ -73,6 +68,7 @@ public class weatherDBconn {
 		 connect.close();
 		 return TMX;
 	 }
+	 /** 오늘 최저 기온을 가져옴*/
 	 public double BringTMN() throws SQLException {
 		 Api.weatherApi w = new Api.weatherApi();
 		 double TMN = 0.0;		 
