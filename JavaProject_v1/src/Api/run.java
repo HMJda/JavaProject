@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 
 public class run {
-	public static void main(String[] args) throws IOException, SQLException{
+	public void start() throws IOException, SQLException{
 		/** db 연결 부분 */
         weatherDBconn dbConn = new weatherDBconn();
         Connection connect = dbConn.dbConn();
@@ -70,7 +70,7 @@ public class run {
 			base_date = Integer.toString(date);
 		}
 		
-    	System.out.println("현재시각"+base_date+wapi.localTime());
+    	//System.out.println("현재시각"+base_date+wapi.localTime()); //현재 시각을 나타내는 부분
     	
     	//String nx = "98"; //임시 데이터 값 부산
     	//String ny = "76";//임시 데이터 값  
