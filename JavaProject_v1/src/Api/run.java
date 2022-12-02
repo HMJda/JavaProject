@@ -37,11 +37,23 @@ public class run {
 		//xy = XY.convertGRID_GPS(gpsxy.Y ,gpsxy.X); 
     	//System.out.println(gpsxy.X+" "+gpsxy.Y); //GPS 테스트
 		
+		/**위치 정보 삭제 
+		try {
+			PreparedStatement reset = connect.prepareStatement("DELETE FROM 위치정보"); // db 초기화 부분
+			reset.executeUpdate();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		*/
 		/**DB상에 위치정보 넣는 곳*/
-		System.out.println("주소를 입력해주세요 : ");
-		BufferedReader io = new BufferedReader(new InputStreamReader(System.in));
-		String address = io.readLine();
-	    dbConn.Inputxy(address);
+		String nx = dbConn.BringX();
+		if(nx == null) { //db상에 위치정보 없으면 위치 입력 받게 함
+			System.out.println("주소를 입력해주세요 : ");
+			BufferedReader io = new BufferedReader(new InputStreamReader(System.in));
+			String address = io.readLine();
+		    dbConn.Inputxy(address);
+		}
+		
 		
 		String base_time = "2300"; //임시 데이터 값 
 		//String PageNo = "1";
