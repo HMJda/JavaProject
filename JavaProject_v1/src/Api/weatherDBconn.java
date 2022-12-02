@@ -124,6 +124,13 @@ public class weatherDBconn {
     			ny CHAR(20) NOT NULL    
 			);
 		  */
+		 /** 위치 입력받기 전에 db 비워주기 */
+		 try { 
+				PreparedStatement reset = connect.prepareStatement("DELETE FROM 위치정보"); // db 초기화 부분
+				reset.executeUpdate();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
 		 String insertQuery = 
 	    			"insert into 위치정보 (nx,ny) values (?,?)";
 		 try {
