@@ -53,10 +53,10 @@ public class weatherDBconn {
 		 Api.weatherApi w = new Api.weatherApi();
 		 double TMX = 0.0;		 
 		 Connection connect = dbConn(); 
-		 ResultSet rs = select("날씨");
+		 ResultSet rs = select("날씨"); //ResultSet에 선택한 테이블 넣기
 		 
-		 while(rs.next()) {	
-			 if(rs.getString(1).trim().equals(w.localDate())   ) {
+		 while(rs.next()) {	//rs.next를 통해 다음 row로 이동
+			 if(rs.getString(1).trim().equals(w.localDate())   ) {//getString(i)는 i번째 컬럼을 가져옴(string) trim 사용해서 공백제거
 				 if(TMX==0.0) {
 					 TMX = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
 				 }
