@@ -264,7 +264,20 @@ public class weatherApi{
                     	e1.printStackTrace();
                     }
                 }
-                /** db 저장 부분 */  
+                /** db 저장 부분 */ 
+                /*
+                 * CREATE TABLE  날씨(
+    					날짜 CHAR(20) NOT NULL,
+    					시간 CHAR(20) NOT NULL,
+    					기온 CHAR(20),
+    					풍속 CHAR(20),
+    					하늘상태 CHAR(20),
+    					강수형태 CHAR(20),
+    					강수확률 CHAR(20),
+    					최고기온 CHAR(20),
+    					최저기온 CHAR(20)
+					);
+                 */
             } 
 
         }
