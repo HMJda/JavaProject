@@ -44,7 +44,7 @@ public class weatherDBconn {
 	    	 ResultSet select = stmt.executeQuery(selectQuery);
 			return select;
 		 } catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();	
 			return null;
 		 }
 	 }
