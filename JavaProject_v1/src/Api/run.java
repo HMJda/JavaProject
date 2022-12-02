@@ -46,7 +46,6 @@ public class run {
 		}
 		*/
 		/**DB상에 위치정보 넣는 곳*/
-		//String nx = dbConn.BringX();
 		if(dbConn.BringX() == null) { //db상에 위치정보 없으면 위치 입력 받게 함
 			System.out.println("주소를 입력해주세요 : ");
 			BufferedReader io = new BufferedReader(new InputStreamReader(System.in));
