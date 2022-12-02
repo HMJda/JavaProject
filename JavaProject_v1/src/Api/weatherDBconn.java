@@ -57,12 +57,17 @@ public class weatherDBconn {
 		 
 		 while(rs.next()) {	//rs.next를 통해 다음 row로 이동
 			 if(rs.getString(1).trim().equals(w.localDate())   ) {//getString(i)는 i번째 컬럼을 가져옴(string) trim 사용해서 공백제거 (현재 날짜와, DB상의 날짜 비교)
-				 if(TMX==0.0) {
-					 TMX = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
-				 }
-				 else if(TMX < Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""))) {
-					 TMX = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
-				 }
+				if(rs.getString(8) != null) {
+					TMX = Double.parseDouble(rs.getString(8).replaceAll(" ℃", ""));
+				}
+				else {
+					 if(TMX==0.0) {
+						 TMX = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
+					 }
+					 else if(TMX < Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""))) {
+						 TMX = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
+					 }
+				}
 			 }
 		 }		 
 		 connect.close();
@@ -76,16 +81,24 @@ public class weatherDBconn {
 		 ResultSet rs = select("날씨");
 		 while(rs.next()) {
 			 if(rs.getString(1).trim().equals(w.localDate())  ) {
-				 
-				 if(TMN==0.0) {
-					 TMN = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
+				 if(rs.getString(9) != null) {
+						TMN = Double.parseDouble(rs.getString(9).replaceAll(" ℃", ""));
+				}
+				 else {
+					 if(TMN==0.0) {
+						 TMN = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
+					 }
+					 else if(TMN > Double.parseDouble(rs.getString(3).replaceAll(" ℃", "")) ) {					
+						 TMN = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
+					 }
 				 }
-				 else if(TMN > Double.parseDouble(rs.getString(3).replaceAll(" ℃", "")) ) {					
-					 TMN = Double.parseDouble(rs.getString(3).replaceAll(" ℃", ""));
-				 }
+				
 			 }
 		 }
 		 connect.close();
 		 return TMN;
+	 }
+	 /** DB에 지리정보 저장*/
+	 public void InputGps(String xy) {
 	 }
 }
