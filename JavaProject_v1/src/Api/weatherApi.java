@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.sql.*; // SQL 
 
 public class weatherApi{
-	/** 현재 날짜 가져오기*/ //https://hianna.tistory.com/607 참고함
+	/** 현재 날짜 가져오기*/ 
 	public String localDate() 
     {
     
