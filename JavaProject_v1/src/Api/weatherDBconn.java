@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Api.gpsApi.Adress;
+import Api.translateXY.LatXLngY;
+
 public class weatherDBconn {
 	/** db 연결 */
 	public Connection dbConn() {
@@ -59,6 +62,7 @@ public class weatherDBconn {
 			 if(rs.getString(1).trim().equals(w.localDate())   ) {//getString(i)는 i번째 컬럼을 가져옴(string) trim 사용해서 공백제거 (현재 날짜와, DB상의 날짜 비교)
 				if(rs.getString(8) != null) {
 					TMX = Double.parseDouble(rs.getString(8).replaceAll(" ℃", ""));
+					break;
 				}
 				else {
 					 if(TMX==0.0) {
@@ -83,6 +87,7 @@ public class weatherDBconn {
 			 if(rs.getString(1).trim().equals(w.localDate())  ) {
 				 if(rs.getString(9) != null) {
 						TMN = Double.parseDouble(rs.getString(9).replaceAll(" ℃", ""));
+						break;
 				}
 				 else {
 					 if(TMN==0.0) {
@@ -98,7 +103,56 @@ public class weatherDBconn {
 		 connect.close();
 		 return TMN;
 	 }
-	 /** DB에 지리정보 저장*/
-	 public void InputGps(String xy) {
+	 /** DB에 위치정보 저장*/
+	 public void Inputxy(String gps) {
+		 gpsApi g = new gpsApi();
+		 translateXY XY = new translateXY();
+		 Adress gpsxy;
+		 LatXLngY xy;
+		 gpsxy = g.bringGpsfromApi(gps);
+		 /**위도 경도 입력 받아 xy좌표로 변경하는 부분*/
+		 xy = XY.convertGRID_GPS(gpsxy.Y ,gpsxy.X);
+		 String nx = "98"; //임시 데이터 값 부산
+	     String ny = "76";//임시 데이터 값  
+	    	
+	     nx = Integer.toString((int)xy.x); /**변경된 위도경도 x,y값을 스트링형으로 변형*/
+	     ny = Integer.toString((int)xy.y);
+		 Connection connect = dbConn(); //db연결
+		 /*
+		    CREATE TABLE  위치정보(
+    			nx CHAR(20) NOT NULL,
+    			ny CHAR(20) NOT NULL    
+			);
+		  */
+		 String insertQuery = 
+	    			"insert into 위치정보 (nx,ny) values (?,?)";
+		 try {
+         	PreparedStatement preState = connect.prepareStatement(insertQuery); // db에 정보 입력 부분
+         	preState.setString(1,nx);
+         	preState.setString(2,ny);
+         	preState.executeUpdate();
+         } catch (SQLException e1) {
+         	e1.printStackTrace();
+         }
+	 }
+	 /** DB에서 위치정보 nx 가져오기*/
+	 public String BringX() throws SQLException {
+		 String nx = "";	
+		 Connection connect = dbConn(); 
+		 ResultSet rs = select("위치정보");		
+		 rs.next();
+		 nx = rs.getString(1);
+		 connect.close();
+		 return nx;
+	 }
+	 /** DB에서 위치정보 ny 가져오기*/
+	 public String BringY() throws SQLException {
+		 String ny = "";	
+		 Connection connect = dbConn(); 
+		 ResultSet rs = select("위치정보");		
+		 rs.next();
+		 ny = rs.getString(2);
+		 connect.close();
+		 return ny;
 	 }
 }
