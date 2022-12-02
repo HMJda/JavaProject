@@ -140,19 +140,24 @@ public class weatherDBconn {
 		 String nx = "";	
 		 Connection connect = dbConn(); 
 		 ResultSet rs = select("위치정보");		
-		 rs.next();
-		 nx = rs.getString(1);
-		 connect.close();
-		 return nx;
+		 while(rs.next()) {
+			 nx = rs.getString(1);		
+			 connect.close();
+			 return nx;
+		 }		  
+		 return null;
 	 }
 	 /** DB에서 위치정보 ny 가져오기*/
 	 public String BringY() throws SQLException {
 		 String ny = "";	
 		 Connection connect = dbConn(); 
 		 ResultSet rs = select("위치정보");		
-		 rs.next();
-		 ny = rs.getString(2);
+		 while(rs.next()) {
+			 ny = rs.getString(2);		
+			 connect.close();
+			 return ny;
+		 }		 
 		 connect.close();
-		 return ny;
+		 return null;
 	 }
 }
