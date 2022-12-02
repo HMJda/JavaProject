@@ -140,7 +140,7 @@ public class weatherDBconn {
 		 String nx = "";	
 		 Connection connect = dbConn(); 
 		 ResultSet rs = select("위치정보");		
-		 while(rs.next()) {
+		 while(rs.next()) {//열이 있는 경우에만 nx 값 저장 
 			 nx = rs.getString(1);		
 			 connect.close();
 			 return nx;
@@ -152,7 +152,7 @@ public class weatherDBconn {
 		 String ny = "";	
 		 Connection connect = dbConn(); 
 		 ResultSet rs = select("위치정보");		
-		 while(rs.next()) {
+		 while(rs.next()) { //열이 있는 경우에만 ny 값 저장
 			 ny = rs.getString(2);		
 			 connect.close();
 			 return ny;
