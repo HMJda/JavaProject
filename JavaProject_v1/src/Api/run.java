@@ -17,7 +17,7 @@ public class run {
         weatherDBconn dbConn = new weatherDBconn();
         Connection connect = dbConn.dbConn();
 	    try {
-			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨"); // db 초기화 부분
+			PreparedStatement reset = connect.prepareStatement("DELETE FROM 날씨"); // 날씨 db 초기화 부분
 			reset.executeUpdate();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -82,6 +82,7 @@ public class run {
     	
     	//System.out.println(nx+ny);//x,y 좌표 테스트
     	
+    	/**DB상에 날씨 정보 넣는 부분*/
     	for(int i = 1;i<4;i++) {
     		wapi.bringWeaterFromApi(Integer.toString(i),base_date,base_time,dbConn.BringX().trim(),dbConn.BringY().trim());   		
     	}
@@ -89,11 +90,12 @@ public class run {
         //System.out.println(gpsxy.jibunAddress); //jibunAddress 출력
         
         //최저 최고 기온 테스트
+    	/*
     	double TMX = dbConn.BringTMX();   	
     	double TMN = dbConn.BringTMN();
     	System.out.println("최고 기온 " +TMX);
     	System.out.println("최저 기온 " +TMN);
-    	
+    	*/
 	}
 
 }
