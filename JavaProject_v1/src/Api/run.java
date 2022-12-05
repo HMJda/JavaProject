@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 
 public class run {
-	public void start() throws IOException, SQLException{
+	public void runApi() throws IOException, SQLException{
 		/** db 연결 부분 */
         weatherDBconn dbConn = new weatherDBconn();
         Connection connect = dbConn.dbConn();
@@ -44,12 +44,13 @@ public class run {
 		}
 		*/
 		/**DB상에 위치정보 넣는 곳*/
+		/*
 		if(dbConn.BringX() == null) { //db상에 위치정보 없으면 위치 입력 받게 함
 			System.out.println("주소를 입력해주세요 : ");
 			BufferedReader io = new BufferedReader(new InputStreamReader(System.in));
 			String address = io.readLine();
 		    dbConn.Inputxy(address);
-		}
+		}*/
 		
 		
 		String base_time = "2300"; //임시 데이터 값 
