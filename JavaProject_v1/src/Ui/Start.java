@@ -1,18 +1,20 @@
 package Ui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.SQLException;
 import java.util.StringTokenizer;
 import javax.swing.border.TitledBorder;
 import Ui.information.*;
 
+import Api.*;
+
 public class Start extends JFrame{
 	private JFrame mainframe;
 	int count = 0;	//패널 순서
-	information in = new information();	//information 객체 생성
-	Save InFo = in.Information();
+	information Information = new information();	//information 객체 생성
+	Savepanel infopanel = Information.weatheradd();	//information의 Savepanel 클래스 값을 반환받음
 	
 	public Start() {
 		mainframe = new JFrame();
@@ -62,23 +64,19 @@ public class Start extends JFrame{
 		next.setBounds(270, 85, 70, 25);
 		next.setFont(new Font("인터파크고딕 M", Font.BOLD, 13));
 		mainframe.getContentPane().add(next);
-			
 		
-		JLabel labeladress = new JLabel("위치: " + InFo.adress);	//위치 출력
-		labeladress.setBounds(12, 30, 250, 25);
-		labeladress.setFont(new Font("인터파크고딕 M", Font.BOLD, 20));
-		mainframe.getContentPane().add(labeladress);
 		
-		for(int i = 0; i < InFo.line; i++) {
-			mainframe.getContentPane().add(InFo.Todaypanel[i]);
-			mainframe.getContentPane().add(InFo.rainpanel[i]);
-			mainframe.getContentPane().add(InFo.weatherpanel[i]);
-			if(i > 0) {
-				InFo.Todaypanel[i].setVisible(false);
-				InFo.rainpanel[i].setVisible(false);
-				InFo.weatherpanel[i].setVisible(false);
+		for(int i = 0; i < infopanel.rowcount; i++) {
+			mainframe.getContentPane().add(infopanel.Todaypanel[i]);
+			mainframe.getContentPane().add(infopanel.rainpanel[i]);
+			mainframe.getContentPane().add(infopanel.weatherpanel[i]);
+			if(i > 0) {	//첫 실행시 첫 화면만 띄움 
+				infopanel.Todaypanel[i].setVisible(false);
+				infopanel.rainpanel[i].setVisible(false);
+				infopanel.weatherpanel[i].setVisible(false);
 			}
 		}
+		
 		
 		
 		//이벤트
@@ -87,14 +85,14 @@ public class Start extends JFrame{
 				if(count == 0)
 					JOptionPane.showMessageDialog(null, "첫 페이지입니다.");
 				else {
-					InFo.Todaypanel[count].setVisible(false);
-					InFo.rainpanel[count].setVisible(false);
-					InFo.weatherpanel[count].setVisible(false);
+					infopanel.Todaypanel[count].setVisible(false);
+					infopanel.rainpanel[count].setVisible(false);
+					infopanel.weatherpanel[count].setVisible(false);
 					
 					count--;
-					InFo.Todaypanel[count].setVisible(true);
-					InFo.rainpanel[count].setVisible(true);
-					InFo.weatherpanel[count].setVisible(true);
+					infopanel.Todaypanel[count].setVisible(true);
+					infopanel.rainpanel[count].setVisible(true);
+					infopanel.weatherpanel[count].setVisible(true);
 					
 				}
 					
@@ -103,17 +101,17 @@ public class Start extends JFrame{
 		
 		next.addActionListener(new ActionListener() {	//다음 버튼 누르면 다음 시간대 날씨 정보 출력 
 			public void actionPerformed(ActionEvent e) {	
-				if(count == InFo.line-1)
+				if(count == infopanel.rowcount-1)
 					JOptionPane.showMessageDialog(null, "마지막 페이지입니다.");
 				else {
-					InFo.Todaypanel[count].setVisible(false);
-					InFo.rainpanel[count].setVisible(false);
-					InFo.weatherpanel[count].setVisible(false);
+					infopanel.Todaypanel[count].setVisible(false);
+					infopanel.rainpanel[count].setVisible(false);
+					infopanel.weatherpanel[count].setVisible(false);
 					
 					count++;
-					InFo.Todaypanel[count].setVisible(true);
-					InFo.rainpanel[count].setVisible(true);
-					InFo.weatherpanel[count].setVisible(true);
+					infopanel.Todaypanel[count].setVisible(true);
+					infopanel.rainpanel[count].setVisible(true);
+					infopanel.weatherpanel[count].setVisible(true);
 				}
 					
 			}
@@ -122,7 +120,9 @@ public class Start extends JFrame{
 	}
 		
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, SQLException {
+		run r = new run();
+		r.runApi();
 		new Start();
 	}
 }
