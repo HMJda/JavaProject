@@ -6,8 +6,10 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.StringTokenizer;
 import javax.swing.border.TitledBorder;
+
+import Api.run;
 import Ui.information.*;
-import Api.*;
+import Ui.*;
 
 public class Start extends JFrame{
 	private JFrame mainframe;
