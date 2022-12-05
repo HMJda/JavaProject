@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.StringTokenizer;
 import javax.swing.border.TitledBorder;
 import Ui.information.*;
-
 import Api.*;
 
 public class Start extends JFrame{
@@ -118,8 +117,6 @@ public class Start extends JFrame{
 		});
 		
 	}
-		
-	
 	public static void main(String[] args) throws IOException, SQLException {
 		run r = new run();
 		r.runApi();
