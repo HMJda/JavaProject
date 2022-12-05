@@ -14,7 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import Api.run;
+import Api.*;
+import Api.weatherDBconn;
 
 
 public class Project01_D implements ActionListener {
@@ -30,12 +31,17 @@ public class Project01_D implements ActionListener {
 		String clientId = "cqf5kmcxyb";
 		String clientSecret = "7tmlHkZNCCZ5RDIES0OfsVsZ4sP4fa9OE1bA8Pxi";
 		try {
-			r.runApi();
+			r.runApi();//runApi 실행
 		} catch (IOException | SQLException e1) {
 			e1.printStackTrace();
 		}		
 		Address vo = null;
 		
+		/** db에 값넣는 부분 */
+		weatherDBconn dbConn =new weatherDBconn();
+		System.out.println();
+	    dbConn.Inputxy(locationgui.address.getText());	 
+	    
 		try {
 			String address = locationgui.address.getText();
 			String addr = URLEncoder.encode(address, "UTF-8");
