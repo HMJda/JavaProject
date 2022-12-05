@@ -3,18 +3,23 @@ package Ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import Api.run;
 
 
 public class Project01_D implements ActionListener {
-
+	run r = new run();
+	
 	LocationGUI locationgui;
 	public Project01_D(LocationGUI locationgui) {
 		this.locationgui = locationgui;
@@ -24,7 +29,11 @@ public class Project01_D implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String clientId = "cqf5kmcxyb";
 		String clientSecret = "7tmlHkZNCCZ5RDIES0OfsVsZ4sP4fa9OE1bA8Pxi";
-				
+		try {
+			r.runApi();
+		} catch (IOException | SQLException e1) {
+			e1.printStackTrace();
+		}		
 		Address vo = null;
 		
 		try {
