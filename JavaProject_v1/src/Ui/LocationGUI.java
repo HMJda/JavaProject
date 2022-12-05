@@ -42,11 +42,7 @@ public class LocationGUI {
 		pan.add(addressLbl);
 		pan.add(address);
 		pan.add(btn);	
-		
-		/** db에 값넣는 부분 */
-		weatherDBconn dbConn =new weatherDBconn();
-	    dbConn.Inputxy(addressLbl.getText());	 
-	    
+    
 	    
 		btn.addActionListener(new Project01_D(this));           // pan에 생성한 버튼(btn) 클릭 시 처리하는 이벤트 핸들러.
 		
