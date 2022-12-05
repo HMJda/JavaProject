@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
@@ -292,7 +293,7 @@ public class JoinnClo extends JFrame {
 		JButton Canbtn = new JButton("취소");
 		Canbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				frame.dispose();
 				new LoginFrame(); 
 			}
 		});
@@ -355,6 +356,11 @@ public class JoinnClo extends JFrame {
 		pwField = new JPasswordField();
 		pwField.setBounds(198, 243, 235, 38);
 		contentPane.add(pwField);
+		
+		ButtonGroup g = new ButtonGroup();
+		g.add(hotRbtn);
+		g.add(coldRbtn);
+		g.add(bothRbtn);
 		
 		hotRbtn.addActionListener(new ActionListener() {
 
