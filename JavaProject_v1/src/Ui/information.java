@@ -11,9 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import Api.*;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import Api.*;
 
 public class information {
 	public class Savepanel{
