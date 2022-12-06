@@ -10,14 +10,13 @@ import javax.swing.border.TitledBorder;
 import Api.run;
 import Ui.information.*;
 import Ui.*;
-
 public class Start extends JFrame{
 	private JFrame mainframe;
 	int count = 0;	//패널 순서
 	information Information = new information();	//information 객체 생성
 	Savepanel infopanel = Information.weatheradd();	//information의 Savepanel 클래스 값을 반환받음
 	
-	public Start() {
+	public Start() throws SQLException {
 		mainframe = new JFrame();
 		mainframe.setTitle("옷 추천 프로그램");
 
