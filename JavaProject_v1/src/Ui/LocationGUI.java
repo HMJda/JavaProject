@@ -14,17 +14,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import Api.*;
 
-public class LocationGUI {
+public class LocationGUI extends JFrame{
 	JTextField address;
 	JLabel resAddress, resX, resY, jibunAddress;
 	JLabel imageLabel;
 	
-	public void initGUI() {
+	public LocationGUI() {
+		
 		JFrame frm = new JFrame("location information");        // 프레임 생성
 		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);     // 프레임의 X 클릭 시 종료.
 		Container c = frm.getContentPane();                     // JFrame 안쪽 영역.
+
+		frm.setLocationRelativeTo(null);
+		
+		frm.setSize(650, 400);	//프레임 크기 
+		frm.setLocationRelativeTo(null);	//프레임 위치 가운데 배치
+		frm.setResizable(false);	//창 크기 고정
+		frm.setVisible(true);	//화면에 프레임 출력
 		
 	               
 		JPanel pan = new JPanel();
@@ -55,19 +62,13 @@ public class LocationGUI {
 		resY = new JLabel("위도");                              // 그리드 4행에 들어갈 위도
 		pan1.add(resAddress);
 		pan1.add(jibunAddress);
-		pan1.add(resX);
-		pan1.add(resY);
+		//pan1.add(resX);
+		//pan1.add(resY);
 		
 		c.add(BorderLayout.NORTH, pan);                           // 상단 pan 세팅
 		                
 		c.add(BorderLayout.CENTER, pan1);                        //  가운데 pan1 세팅
-		
-		frm.setSize(650,400);
-		frm.setVisible(true);
-		
 	}
-	
-	public static void main(String[] args) {
-		new LocationGUI().initGUI();	
-	}
+
+
 }
